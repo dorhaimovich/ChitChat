@@ -33,7 +33,7 @@ async def on_message(message):
         await message.channel.send(response)
 
     if message.content == 'pizza':
-        with open('pizza.jpeg', 'rb') as f:
+        with open('data/pizza.jpeg', 'rb') as f:
             picture = discord.File(f)
             await message.channel.send(file=picture)
 
