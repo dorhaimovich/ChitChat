@@ -4,8 +4,8 @@ import pandas as pd
 class MsgLogger:
 
     def __init__(self):
-        self.msg_tb = pd.DataFrame(columns=['Time', 'Author', 'Message Content'])
-        self.enabled = True
+        self.msg_tb = pd.DataFrame(columns=['Time', 'Author', 'Message Content', 'Mentions'])
+        self.enabled = False
 
     def push_msg(self, message):
         if self.enabled:
@@ -13,6 +13,9 @@ class MsgLogger:
 
     def disable(self):
         self.enabled = False
+
+    def enable(self):
+        self.enabled = True
 
     def export_to_csv(self, filename):
         self.msg_tb.to_csv(f'{filename}.csv', encoding='utf-8')
