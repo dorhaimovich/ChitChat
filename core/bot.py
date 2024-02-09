@@ -3,11 +3,14 @@ import os
 
 import discord
 from dotenv import load_dotenv
+from ..GPT2.textGenerator import generateText
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+intents = discord.Intents.default()
 
-client = discord.Client()
+client = discord.Client(intents=intents)
+
 
 @client.event
 async def on_ready():
@@ -15,26 +18,30 @@ async def on_ready():
     for guild in client.guilds:
         print(f'{client.user} is connected to the following guild:\n'
               f'{guild.name}')
-        
+
         members = '\n - '.join([member.name for member in guild.members])
         print(f'Guild Members:\n - {members}')
+
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content == 'hello':
-        response = 'Hello!'
-        await message.channel.send(response)
+    response = generateText(message.content)
+    await message.channel.send(response)
+    # if message.content == 'hello':
+    #     response = 'Hello!'
+    #     await message.channel.send(response)
+    #
+    # if message.content == 'bye':
+    #     response = 'Goodbye!'
+    #     await message.channel.send(response)
+    #
+    # if message.content == 'pizza':
+    #     with open('data/pizza.jpeg', 'rb') as f:
+    #         picture = discord.File(f)
+    #         await message.channel.send(file=picture)
 
-    if message.content == 'bye':
-        response = 'Goodbye!'
-        await message.channel.send(response)
-
-    if message.content == 'pizza':
-        with open('data/pizza.jpeg', 'rb') as f:
-            picture = discord.File(f)
-            await message.channel.send(file=picture)
 
 client.run(TOKEN)
