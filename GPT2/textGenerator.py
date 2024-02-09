@@ -1,10 +1,13 @@
-import tensorflow as tf
-from transformers import TFGPT2LMHeadModel, GPT2Tokenizer
+# import tensorflow as tf
+# from transformers import TFGPT2LMHeadModel, GPT2Tokenizer
+#
+# tokenizer = GPT2Tokenizer.from_pretrained("gpt2-large")
+# model = TFGPT2LMHeadModel.from_pretrained("gpt2-large", pad_token_id=tokenizer.eos_token_id)
+
+from .modelInitGPT import tokenizer, model
 
 
 def generateText(sentence):
-    tokenizer = GPT2Tokenizer.from_pretrained("gpt2-large")
-    model = TFGPT2LMHeadModel.from_pretrained("gpt2-large", pad_token_id=tokenizer.eos_token_id)
     # prompt = "Answer to this sentence: '"
     # promptSentence = prompt + sentence + "'"
     input_ids = tokenizer.encode(sentence, return_tensors='tf')
