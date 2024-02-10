@@ -57,7 +57,7 @@ async def pause(ctx):
 @client.command()
 async def resume(ctx):
     await ctx.send("Recording Resumed")
-    logger.disable()
+    logger.enable()
 
 
 @client.command()
