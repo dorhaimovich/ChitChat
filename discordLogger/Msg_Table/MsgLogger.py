@@ -9,7 +9,8 @@ class MsgLogger:
 
     def push_msg(self, message):
         if self.enabled:
-            self.msg_tb = self.msg_tb.append(message, ignore_index=True)
+            new_entry = pd.DataFrame([message])
+            self.msg_tb = pd.concat([self.msg_tb, new_entry], ignore_index=True)
 
     def disable(self):
         self.enabled = False
