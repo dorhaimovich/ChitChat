@@ -13,11 +13,11 @@ logger = MsgLogger.MsgLogger()
 network = Network.Network()
 
 
-def get_member_names(c: commands.Bot):
+def get_member_names(c: commands.Bot, author: str):
     r = []
     for guild in c.guilds:
         for member in guild.members:
-            if member != client.user:
+            if member != client.user and member.name != author:
                 r.append(member.name)
     return r
 
@@ -27,6 +27,7 @@ async def on_ready():
     print("The bot is ready for use!")
 
 
+
 @client.event
 async def on_message(message):
     await client.process_commands(message)
@@ -34,12 +35,15 @@ async def on_message(message):
         logger.push_msg(
             {'Time': message.created_at, 'Author': message.author.name, 'Message Content': message.content,
              'Mentions': [m.name for m in message.mentions]})
-        if not message.mentions:
-            network.add_edges(message.author.name, get_member_names(client))
-        else:
+        if not message.mentions and not message.reference:
+            network.add_edges(message.author.name, get_member_names(client, message.author.name))
+        if message.mentions:
             network.add_edges(message.author.name, [m.name for m in message.mentions])
+        if message.reference:
+            referenced_message = await message.channel.fetch_message(message.reference.message_id)
+            referenced_author_name = referenced_message.author.name
+            network.add_edges(message.author.name, [referenced_author_name])
     print(logger.msg_tb)
-
 
 
 @client.command()
@@ -73,4 +77,4 @@ async def end(ctx):
     network.clear()
 
 
-client.run(os.getenv('BOT_TOKEN'))
+client.run(os.getenv('DISCORD_LOGGER_BOT_TOKEN'))

@@ -7,14 +7,16 @@ from ..GPT2.textGenerator import generateText
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 
 client = discord.Client(intents=intents)
+numberOfMessages = 0
 
 
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
+
     for guild in client.guilds:
         print(f'{client.user} is connected to the following guild:\n'
               f'{guild.name}')
@@ -25,11 +27,14 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author == client.user:
+    global numberOfMessages
+    if message.author == client.user or message.author.name == "ChitChat.ai Logger Bot":
         return
-
-    response = generateText(message.content)
-    await message.channel.send(response)
+    numberOfMessages = numberOfMessages + 1
+    if numberOfMessages % 3 == 0:
+        await message.channel.typing()
+        response = generateText(message.content)
+        await message.reply(response)
     # if message.content == 'hello':
     #     response = 'Hello!'
     #     await message.channel.send(response)

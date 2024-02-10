@@ -6,7 +6,7 @@ import matplotlib.pyplot
 class Network:
 
     def __init__(self):
-        self.network = nx.Graph()
+        self.network = nx.MultiDiGraph()
 
     def add_edges(self, src, dest: list):
         for x in dest:
